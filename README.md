@@ -19,14 +19,14 @@
 | Licence | Code MIT (planned); documentation CC BY 4.0 (planned) |
 
 > **In one sentence:** TraceMark embeds an invisible buyer identifier into each copy of a teaching file and, after a leak, compares the file against candidate keys to produce a mode-specific score that must be checked against transaction records.  
-> **What it is not:** not DRM, not encryption, and not an automatic conviction tool.  
+> **What it is not:** A DRM / encryption / automatic conviction tool.  
 > **Current state:** all five modes run locally; PyPI, JupyterHub, and the formal CLI are still being finished.
 
 ---
 
 ## Documentation map
 
-This README has English and Chinese versions. The English version is the default entry point; the Chinese version is [README.zh.md](README.zh.md). The remaining technical documents are currently written in Traditional Chinese.
+This README is available in both English and Chinese. The English version is the default entry point; the Chinese version is available at [README.zh.md](README.zh.md). The remaining technical documents are written in Traditional Chinese.
 
 | Document | Content |
 |---|---|
@@ -47,7 +47,7 @@ In Hong Kong, DSE notes, tutoring materials, and self-made revision notes have l
 
 The traditional defence is a visible watermark such as “For the use of XXX only” printed on the PDF. It deters some buyers, but it can be cropped, covered, retyped after OCR, or removed by reformatting a screenshot. Once the visible mark is gone, the seller has no thread to follow. In other words, a visible watermark can deter but cannot trace.
 
-**TraceMark** is designed for that gap. It embeds a separate identifier for each buyer and, when a file leaks, compares the content against candidate keys to report the most likely leaked version and a similarity score. The module provides four watermarking methods plus one generative mode:
+**TraceMark** is designed to combat the lack of a paper trail. It embeds a separate identifier for each buyer and, when a file leaks, compares the content against candidate keys to report the most likely leaked version and a similarity score. The module provides four watermarking methods plus one generative mode:
 
 1. **Fragile image mode** (`image_fragile`): modifies the least significant bit (LSB) of pixel channels. Capacity is high and the change is invisible; it is suitable for hiding data and verifying an extracted payload, but it does not localise tampering.
 2. **Robust image mode** (`image_robust`): adds a key-dependent balance pattern to luminance, with pilot-block synchronisation, convolutional coding, and soft Viterbi decoding. It targets compression, cropping, rotation, and screenshots.
@@ -130,11 +130,11 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### Current limitations
 
-- PyPI has not been published; the JupyterHub install and formal CLI are not finished. CLI commands are not available yet; use the Python API.
+- PyPI has not yet been published; the JupyterHub install and formal CLI remain unfinished. CLI commands are not available yet; use the Python API.
 - v1 supports images (formats that can be converted to NumPy arrays, such as PNG/BMP) and text; PDF, video, and audio are not supported.
 - A watermark is neither DRM nor encryption; an identification score is a lead, not a verdict.
-- `text_lexical` currently supports only an English tokenizer and lexicon; Chinese synonym support is future work.
-- `text_generative` requires a model and tokenizer; the MLX backend downloads a model on first use. It is not an AI-generated-content detector.
+- `text_lexical` currently supports only an English tokenizer and lexicon; Chinese synonym support may be available in the future.
+- `text_generative` requires a model and tokenizer; the MLX backend downloads a model on first use. It is not an AI content detector.
 
 ---
 
@@ -178,7 +178,7 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### 7.4 Lexical text mode (`text_lexical`)
 
-**Principle:** the current tokenizer and lexicon target English; Chinese synonym examples are future work. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `watermark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
+**Principle:** The current tokenizer and lexicon are tailored for English; support for Chinese synonyms will soon be added. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `watermark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
 
 **Extraction:** only the text, the same public lexicon, and the key are needed; it does not depend on an AI reply or the original document. Encoding uses anchors, local addresses, Reed–Solomon coding, and equation solving, rather than the simplified description “each word pair independently carries one bit and identification uses the match ratio”.
 
@@ -194,7 +194,7 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 **Extraction and identification:** `tokenizer=` is required and must match the one used during generation; `verified=True` means the statistical threshold was met, not that a fixed payload was decoded.
 
-**Positioning:** this is a “watermark at generation time” mode, not an AI-generated-content detector. It does not decide whether a piece of text was generated by AI, and it does not claim compliance with Article 50 of the EU AI Act.
+**Positioning:** this is a “watermark at generation time” mode, not an AI content detector. It does not decide whether a piece of text was generated by AI, and it does not claim compliance with Article 50 of the EU AI Act.
 
 **References:** Kirchenbauer et al. (2023); Fernandez et al. (2023).
 
