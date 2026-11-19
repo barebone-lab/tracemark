@@ -1,0 +1,32 @@
+[project]
+name = "watermark"
+version = "0.1.0"
+description = "Hide bytes in images or text and read them back (CS1302A group project)"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "cryptography>=42",
+    "reedsolo>=1.7,<2",
+    "opencv-python-headless>=5.0.0.93",
+]
+
+[project.optional-dependencies]
+generative = [
+    "mlx-lm>=0.31.3",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["watermark"]
+
+[tool.setuptools.package-data]
+watermark = ["data/*.json"]
+
+[dependency-groups]
+dev = [
+    "pillow>=12.3.0",
+    "pytest>=9.2.0",
+]

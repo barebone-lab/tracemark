@@ -1,0 +1,48 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.uv-cache/
+
+# Build and test output
+build/
+dist/
+*.egg-info/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+junit.xml
+
+# Local research, reference documents and model weights
+/README.md
+/tmp/
+/reference/
+/models/
+*.safetensors
+*.gguf
+*.pt
+*.pth
+*.onnx
+
+# Local credentials (keep example configuration)
+.env
+.env.*
+!.env.example
+!.env.sample
+*.key
+*.pem
+/secrets/
+/keys/
+
+# macOS and editor temporary files
+.DS_Store
+._*
+*.swp
+*.swo
+*~
