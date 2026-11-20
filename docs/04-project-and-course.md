@@ -17,7 +17,7 @@
 | Billy | Bailin CHEN（61209510） | Lead Developer | 套件整合、其餘模式、工具、打包與發布、所有新增檔案 | `tracemark/`、其餘 `tests/`、`tools/`、`pyproject.toml`、`uv.lock`、`.gitignore`、`demo.ipynb`、`docs/` |
 | Amos | Tsun Hei KAE（61201585） | Video Producer | API 測試、demo 影片 | `tests/test_api.py`、1 分鐘 demo 影片 |
 
-> 課程規定每組 3–6 人；本組為 group85（4 人）。五種模式已實作；目前焦點是雙語文件、PyPI／JupyterHub 驗證、demo 與提交。文件與程式同步進行，任何 API 或數據改動都要同步更新 `README.md`、`README.zh.md` 與 `docs/`。
+> 課程規定每組 3–6 人；本組為 group85（4 人）。五種模式已實作；`0.1.0` 已在 PyPI 發布；目前焦點是 JupyterHub 驗證、demo 與提交。文件與程式同步進行，任何 API 或數據改動都要同步更新 `README.md`、`README.zh.md` 與 `docs/`。
 
 ### 10.2 時程（2026-11-12 至 2026-11-22）
 
@@ -129,13 +129,13 @@ pie showData
 
 | 準則 | 官方要求 | TraceMark 的對應 | 目前狀態 |
 |---|---|---|---|
-| published | 公開 PyPI 套件頁與 public git repo；套件已上載並版本化 | `tracemark` 套件、`pyproject.toml`、GitHub repo `barebone-lab/tracemark`、`0.1.0` | PyPI 待發布；repo 待確認公開 |
-| documented | 公開文件：動機、創新、使用案例、安裝與使用指南 | 雙語 README 與 `docs/` | 初稿完成，英文版待校對 |
+| published | 公開 PyPI 套件頁與 public git repo；套件已上載並版本化 | `tracemark` 套件、`pyproject.toml`、GitHub repo `barebone-lab/tracemark`、`0.1.0` | 已完成：`0.1.0` 已在 [PyPI](https://pypi.org/project/tracemark/) 發布，首頁連到公開 repo |
+| documented | 公開文件：動機、創新、使用案例、安裝與使用指南 | 雙語 README 與 `docs/` | 已完成：中英文 README 結構一致，並已推上 GitHub |
 | functional | 在 JupyterHub 以 `pip install` 安裝無衝突，並在簡報中示範 | Python API、pytest、JupyterHub 安裝測試 | 本機測試通過；JupyterHub 待驗證 |
-| innovative | 可重用、不易被現有套件取代的功能 | 五種模式共用 API、`identify` 的 match／none／ambiguous | 已實作 |
+| innovative | 可重用、不易被現有套件取代的功能 | 五種模式共用 API、`identify` 的 match／none／ambiguous | 已實作；README「Why not existing tools」一節列出與現有套件的比較 |
 | teamwork | 定期 commit history 與不同成員聯合簡報 | 四人分工、Git 流程、1 分鐘 demo | 進行中 |
 
-每項準則為 0/1 分，合計 5 分。`published` 與 `functional` 是目前最需要優先補齊的兩項；`documented` 已有初稿，提交前需確認公開連結。
+每項準則為 0/1 分，合計 5 分。`published` 與 `documented` 已完成；`functional`（JupyterHub 安裝）是目前最需要優先補齊的一項。
 
 ### 11.5 提交與簡報
 

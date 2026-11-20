@@ -107,7 +107,7 @@ env -u RUN_DEEPSEEK -u WATERMARK_LLM uv run --locked pytest -q
 |---|---|---|---|
 | 單元／整合測試 | 全部通過 | `pytest -q` | 已測：84 passed、2 skipped（2026-11-16） |
 | 本地安裝 | `python -m pip install .` 成功 | 乾淨虛擬環境 | 已測（本機） |
-| PyPI 安裝 | `pip install tracemark` 成功 | 公開發布後 | 待完成（尚未發布） |
+| PyPI 安裝 | `pip install tracemark` 成功 | 乾淨虛擬環境 | 已測：`0.1.0` 於全新本機 Python 3.12 環境安裝成功 |
 | JupyterHub 安裝 | 無依賴衝突並可 demo | 課程環境 | 待完成 |
 | `image_fragile` 無損 round-trip | 位元完全還原 | 單元測試 | 已測 |
 | `image_robust` JPEG q=30／50 | 可提取 | 合成圖測試 | 已納入；成功率未統計 |
