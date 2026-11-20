@@ -142,13 +142,13 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### 7.1 Fragile image mode (`image_fragile`)
 
-**Principle:** payload bits are written into the least significant bit (LSB) of each pixel channel. The change is at most a few least-significant-bit levels and is almost invisible. Before embedding, a key-derived pseudorandom permutation spreads the bits across the image; extraction reverses the permutation with the same key. Each channel can carry one or two bits; RGBA preserves alpha by default.
+**Principle:** Payload bits are written into the least significant bit (LSB) of each pixel channel. The change is at most a few least-significant-bit levels and is almost invisible. Before embedding, a key-derived pseudorandom permutation spreads the bits across the image; extraction reverses the permutation with the same key. Each channel can carry one or two bits; RGBA preserves alpha by default.
 
-**Capacity:** for a 1024×1024 RGB image, `standard` profile, one bit per channel, net capacity is **393,195 bytes** (after the 21-byte payload overhead).
+**Capacity:** For a 1024×1024 RGB image with `standard` profile and one bit per channel, net capacity is **393,195 bytes** (after the 21-byte payload overhead).
 
-**Robustness:** suitable only for lossless formats and identical copies; JPEG, scaling, cropping, and screenshots destroy the payload.
+**Robustness:** Suitable only for lossless formats and identical copies; JPEGs, scaling, cropping, and screenshots destroy the payload.
 
-**Purpose:** hiding data and verifying an extracted payload. It does **not** provide tamper localisation: there is no coordinate map or heat map, and no integrity authentication of the whole carrier; a successful extraction does not prove that the image is unmodified.
+**Purpose:** To conceal data and verify a certain payload. It does **not** provide tamper localisation: there is no coordinate or heat map, and no integrity authentication of the whole carrier; a successful extraction does not prove that the image is unmodified.
 
 **References:** van Schyndel et al. (1994); Yeung & Mintzer (1997).
 
@@ -178,11 +178,11 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### 7.4 Lexical text mode (`text_lexical`)
 
-**Principle:** The current tokenizer and lexicon are tailored for English; support for Chinese synonyms will soon be added. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `watermark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
+**Principle:** The current tokenizer and lexicon are tailor-made for English; support for Chinese synonyms will soon be added. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `watermark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
 
-**Extraction:** only the text, the same public lexicon, and the key are needed; it does not depend on an AI reply or the original document. Encoding uses anchors, local addresses, Reed–Solomon coding, and equation solving, rather than the simplified description “each word pair independently carries one bit and identification uses the match ratio”.
+**Extraction:** Only the text, the same public lexicon, and the key are needed; it does not depend on an AI reply or the original document. Encoding uses anchors, local addresses, Reed–Solomon coding, and equation solving, rather than the simplified description “each word pair independently carries one bit and identification uses the match ratio”.
 
-**Capacity (measured on a specific sample, not a general guarantee):** the current 7,000-English-word sample can hide **3 bytes**; its 3,000-word prefix is insufficient under the specified setting; the 2,000-word key-only sample can identify the source but cannot hide the same 3-byte ID.
+**Capacity (measured on a specific sample, not a general guarantee):** The current 7,000-English-word sample can hide **3 bytes**; its 3,000-word prefix is insufficient under the specified setting; the 2,000-word key-only sample can identify the source but cannot hide the same 3-byte ID.
 
 **Limits:** OCR readability depends on whether the actual vocabulary survives; rewriting, translation, and typo/omission changes can cause failure. AI candidate review does not guarantee that meaning is unchanged. With `return_details=True`, embedding returns `(marked_text, details)`, including the actual substitutions; by default it returns the marked text directly.
 
@@ -194,7 +194,7 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 **Extraction and identification:** `tokenizer=` is required and must match the one used during generation; `verified=True` means the statistical threshold was met, not that a fixed payload was decoded.
 
-**Positioning:** this is a “watermark at generation time” mode, not an AI content detector. It does not decide whether a piece of text was generated by AI, and it does not claim compliance with Article 50 of the EU AI Act.
+**Positioning:** This is a watermark generation tool, not an AI content detector. It does not decide whether a piece of text was generated by AI, and it does not claim compliance with Article 50 of the EU AI Act.
 
 **References:** Kirchenbauer et al. (2023); Fernandez et al. (2023).
 
@@ -216,6 +216,6 @@ The five modes are not mutually exclusive. In practice they can be combined: a r
 
 ## About this documentation set
 
-- This page is the English README and the default GitHub entry point; the Chinese version is [README.zh.md](README.zh.md).
-- The other six technical documents are linked from the documentation map above and are currently written in Traditional Chinese.
+- This page is the English README and the default GitHub entry point; the Chinese version is available at [README.zh.md](README.zh.md).
+- The other six technical documents are linked from the documentation map above and are written in Traditional Chinese.
 - Document version: v0.3 (17 November 2026). Implementation facts are current to 16 November 2026; measured results and unverified targets are reported separately in [03-testing-and-evaluation.md](docs/03-testing-and-evaluation.md).
