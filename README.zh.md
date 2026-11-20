@@ -14,13 +14,13 @@
 | 團隊 | 4 人（group85）：Wing、Kay、Billy、Amos |
 | 截止 | 2026-11-22（星期日）23:59 |
 | 文件版本 | v0.3（2026-11-17） |
-| 實作狀態 | 五種模式已實作（套件版本 `0.1.0`）；PyPI、JupyterHub 安裝與 CLI 待完成 |
-| 測試狀態 | 2026-11-16 本地：84 passed、2 skipped（131.83 秒，Python 3.12.13）；coverage 未量測；設計目標另列 |
+| 實作狀態 | 五種模式已實作。`0.1.0` 已在 PyPI 發布，JupyterHub 安裝待驗證，正式 CLI 仍在規劃中。 |
+| 測試狀態 | 2026-11-20 使用 Python 3.12.13 在本機測試，82 項通過、2 項跳過，耗時 140.80 秒。測試覆蓋率待量測，設計目標另列。 |
 | 授權 | 程式碼 MIT（預定）；文件 CC BY 4.0（預定） |
 
 > **一句話**：TraceMark 為每份售出的教材嵌入看不見的買家識別碼，並在外洩後以候選密鑰比對，輸出可解釋的模式內證據分數。  
 > **不是什麼**：不是 DRM、不是加密、不是自動定罪工具。  
-> **現況**：五種模式已可在本機執行；PyPI、JupyterHub 與正式 CLI 仍在收尾。
+> **現況**：五種模式已可在本機執行。`0.1.0` 已在 PyPI 發布，JupyterHub 安裝待驗證。
 
 ---
 
@@ -63,13 +63,13 @@
 
 ## 快速開始：安裝、匯入與使用
 
-> **狀態**：PyPI 發布仍待完成；JupyterHub 安裝仍待驗證。以下以本機安裝為主。套件名稱是 `tracemark`，Python 版本要求 `>=3.10`。
+> **狀態**：`tracemark` 需要 Python `>=3.10`。已在全新的本機 Python 3.12 環境驗證 PyPI 安裝，JupyterHub 安裝待驗證。
 
 ### 安裝
 
 | 方式 | 指令 | 狀態 |
 |---|---|---|
-| PyPI | `pip install tracemark` | 本專案尚未發布；請待發布公告 |
+| PyPI | `pip install tracemark` | [0.1.0 已發布](https://pypi.org/project/tracemark/0.1.0/) |
 | 本地原始碼 | `git clone https://github.com/barebone-lab/tracemark.git`<br>`cd tracemark`<br>`python -m pip install .` | 可用 |
 | 開發模式 | `python -m pip install -e .` | 可用 |
 | 生成模式（可選） | `python -m pip install '.[generative]'` | 需要 Apple silicon 與 MLX；首次使用會下載模型 |
@@ -130,10 +130,10 @@ print(who.status, who.best)  # match, buyer-001
 
 ### 目前限制
 
-- PyPI 尚未發布；JupyterHub 安裝與正式 CLI 尚未完成。CLI 指令目前不提供，請使用 Python API。
+- JupyterHub 安裝待驗證。此版本使用 Python API，正式 CLI 仍在規劃中。
 - v1 支援圖像（PNG／BMP 等可轉為 NumPy 陣列的格式）與文字；PDF、影片、音訊未支援。
 - 水印不是 DRM，也不是加密；識別分數是線索，不是判決。
-- `text_lexical` 目前只支援英文 tokenizer 與詞表；中文同義詞列未來擴充。
+- `text_lexical` 目前只支援英文文字。
 - `text_generative` 需要模型與 tokenizer；第一次使用 MLX backend 會下載模型。它不是 AI 生成內容偵測器。
 
 ---
@@ -178,7 +178,7 @@ print(who.status, who.best)  # match, buyer-001
 
 ### 7.4 文字選詞模式（`text_lexical`）
 
-**原理**：現有 tokenizer 及詞表針對英文；中文同義詞例子列為未來擴充。嵌入需要已批准的候選替換：`candidates=` 是 `Substitution(start, end, original, replacement)` 的序列，位置是原文字串索引，類別從 `tracemark.text_lexical` 匯入。另一個選項是 `provider=`，提供 `propose(text)` 回傳候選；現成 `DeepSeekProvider` 可用 `DEEPSEEK_API_KEY`，會將句子送至 DeepSeek 產生並雙重審查替換，因此涉及外部 API 與文意審閱限制。
+**原理**：現有 tokenizer 及詞表支援英文。嵌入需要已批准的候選替換：`candidates=` 是 `Substitution(start, end, original, replacement)` 的序列，位置是原文字串索引，類別從 `tracemark.text_lexical` 匯入。另一個選項是 `provider=`，提供 `propose(text)` 回傳候選；現成 `DeepSeekProvider` 可用 `DEEPSEEK_API_KEY`，會將句子送至 DeepSeek 產生並雙重審查替換，因此涉及外部 API 與文意審閱限制。
 
 **提取**：只需文字、相同公開詞表與密鑰；不依賴 AI 回覆或原文。編碼使用錨點、局部位址、Reed–Solomon 及方程求解，而不是「每個詞對獨立承載 1 bit、按匹配比例識別」的簡化描述。
 
@@ -218,4 +218,4 @@ print(who.status, who.best)  # match, buyer-001
 
 - 本頁是中文 README；英文版是 [README.md](README.md)，也是 GitHub 的預設入口。
 - 其餘 6 份技術文件由上面的「文件導覽」進入；目前以繁體中文撰寫。
-- 文件版本：v0.3（2026-11-17）。實作資料截至 2026-11-16；測試結果與待驗證目標分開列於 [03-testing-and-evaluation.md](docs/03-testing-and-evaluation.md)。
+- 文件版本 v0.3（2026-11-17），發布與測試狀態於 2026-11-20 更新。測試結果與待驗證目標分開列於 [03-testing-and-evaluation.md](docs/03-testing-and-evaluation.md)。

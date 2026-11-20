@@ -1,10 +1,47 @@
 # TraceMark
 
-> Every set of notes you sell carries an invisible signature that can be traced back to its buyer.
+**Same notes. Different fingerprints.**
 
-**English** | [中文](README.zh.md)
+Trace a leaked copy of text or an image back to the recipient it was issued to.
 
-**CS1302A Project Documentation**
+![Two visually identical copies of Python study notes are issued to buyer-001 and buyer-002. TraceMark checks both keys against the leaked copy and matches buyer-002.](docs/assets/tracemark-overview.png)
+
+`pip install tracemark` · [Quick start](#quick-start) · [PyPI](https://pypi.org/project/tracemark/0.1.0/) · [中文](README.zh.md)
+
+## Quick start
+
+Issue the same notes to two buyers, then check the leaked copy against both keys.
+
+```python
+from tracemark import embed, extract, identify
+
+notes = (
+    "Loops\nA for loop visits each item in a collection.\n"
+    "for item in items:\n    print(item)"
+)
+keys = {"buyer-001": "demo-key-001", "buyer-002": "demo-key-002"}
+copies = {
+    buyer: embed(notes, buyer.encode(), key, mode="text_invisible")
+    for buyer, key in keys.items()
+}
+leaked = copies["buyer-002"]
+match = identify(leaked, keys, mode="text_invisible")
+print(match.status, match.best)
+print(extract(leaked, keys[match.best], mode="text_invisible").payload)
+```
+
+```text
+match buyer-002
+b'buyer-002'
+```
+
+## Image demo
+
+`image_robust` embeds an invisible watermark with `markers=False`. It recovered `ID7` from both the watermarked image and a simulated phone capture. The panels show previews of the tested images.
+
+![Handwritten notes on slope and intercept on lined paper, shown as the original watermarked image and a simulated phone capture. Both tests recovered ID7.](docs/assets/tracemark-robust-demo.webp)
+
+## CS1302A project details
 
 **TraceMark** is a Python watermarking and leak-tracing module for tutors, notes sellers, and small content creators. It cannot stop someone from copying a file, but when a copy is resold or leaked, it can answer one crucial question: **who was this copy originally issued to?**
 
@@ -14,13 +51,13 @@
 | Team | 4 members (group85): Wing, Kay, Billy, Amos |
 | Deadline | 22 November 2026 (Sunday), 23:59 |
 | Document version | v0.3 (17 November 2026) |
-| Implementation status | All five modes implemented (package version `0.1.0`); PyPI, JupyterHub install, and CLI still pending |
-| Test status | 2026-11-16 local run: 84 passed, 2 skipped (131.83 s, Python 3.12.13); coverage not measured; design targets listed separately |
+| Implementation status | All five modes implemented. Version `0.1.0` is published on PyPI. JupyterHub installation is pending verification and the CLI is still planned. |
+| Test status | 20 November 2026 local run with Python 3.12.13. 82 passed and 2 skipped in 140.80 s. Coverage has yet to be measured. Design targets are listed separately. |
 | Licence | Code MIT (planned); documentation CC BY 4.0 (planned) |
 
 > **In one sentence:** TraceMark embeds an invisible buyer identifier into each copy of a teaching file and, after a leak, compares the file against candidate keys to produce a mode-specific score that must be checked against transaction records.  
 > **What it is not:** A DRM / encryption / automatic conviction tool.  
-> **Current state:** all five modes run locally; PyPI, JupyterHub, and the formal CLI are still being finished.
+> **Current state:** all five modes run locally. Version `0.1.0` is available on PyPI. JupyterHub installation is pending verification.
 
 ---
 
@@ -61,15 +98,15 @@ This documentation set covers the problem background, the trade-off between two 
 
 ---
 
-## Quick start: install, import, and use
+## Installation and API
 
-> **Status:** the PyPI release is still pending, and the JupyterHub install has not been verified. The instructions below focus on a local install. The package name is `tracemark`, and Python `>=3.10` is required.
+> **Status:** `tracemark` requires Python `>=3.10`. Installation from PyPI has been verified in a clean local Python 3.12 environment. JupyterHub installation is pending verification.
 
 ### Install
 
 | Method | Command | Status |
 |---|---|---|
-| PyPI | `pip install tracemark` | Not published by this project yet; wait for the release announcement |
+| PyPI | `pip install tracemark` | [Version 0.1.0 available](https://pypi.org/project/tracemark/0.1.0/) |
 | Local source | `git clone https://github.com/barebone-lab/tracemark.git`<br>`cd tracemark`<br>`python -m pip install .` | Available |
 | Development mode | `python -m pip install -e .` | Available |
 | Generative mode (optional) | `python -m pip install '.[generative]'` | Requires Apple silicon and MLX; downloads a model on first use |
@@ -82,27 +119,7 @@ Base dependencies are `numpy>=1.24`, `cryptography>=42`, `reedsolo>=1.7,<2`, and
 from tracemark import embed, extract, identify
 ```
 
-### Basic usage
-
-The following example runs as written. `content` is text in memory, `payload` is `bytes`, and `key` is a non-empty `bytes` or `str`.
-
-```python
-from tracemark import embed, extract, identify
-
-keys = {"buyer-001": "demo-key-001", "buyer-002": "demo-key-002"}
-text = "This is a set of teaching notes. " * 20
-marked = embed(
-    text,
-    b"BUYER-001",
-    keys["buyer-001"],
-    mode="text_invisible",
-)
-result = extract(marked, keys["buyer-001"], mode="text_invisible")
-print(result.verified, result.payload)  # True, b'BUYER-001'
-
-who = identify(marked, keys, mode="text_invisible")
-print(who.status, who.best)  # match, buyer-001
-```
+In the quick-start example, `content` is text in memory, `payload` is `bytes`, and `key` is a non-empty `bytes` or `str`.
 
 Image input is a NumPy `uint8` array (RGB, RGBA, or grayscale); `embed` returns a new image array or string and leaves the input unchanged. The API does not open or save files; file I/O is the caller's responsibility.
 
@@ -130,10 +147,10 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### Current limitations
 
-- PyPI has not yet been published; the JupyterHub install and formal CLI remain unfinished. CLI commands are not available yet; use the Python API.
+- JupyterHub installation is pending verification. This release uses the Python API, with a CLI planned.
 - v1 supports images (formats that can be converted to NumPy arrays, such as PNG/BMP) and text; PDF, video, and audio are not supported.
 - A watermark is neither DRM nor encryption; an identification score is a lead, not a verdict.
-- `text_lexical` currently supports only an English tokenizer and lexicon; Chinese synonym support may be available in the future.
+- `text_lexical` currently supports English text only.
 - `text_generative` requires a model and tokenizer; the MLX backend downloads a model on first use. It is not an AI content detector.
 
 ---
@@ -178,7 +195,7 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### 7.4 Lexical text mode (`text_lexical`)
 
-**Principle:** The current tokenizer and lexicon are tailor-made for English; support for Chinese synonyms will soon be added. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `tracemark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
+**Principle:** The tokenizer and lexicon currently support English. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `tracemark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
 
 **Extraction:** Only the text, the same public lexicon, and the key are needed; it does not depend on an AI reply or the original document. Encoding uses anchors, local addresses, Reed–Solomon coding, and equation solving, rather than the simplified description “each word pair independently carries one bit and identification uses the match ratio”.
 
@@ -218,4 +235,4 @@ The five modes are not mutually exclusive. In practice they can be combined: a r
 
 - This page is the English README and the default GitHub entry point; the Chinese version is available at [README.zh.md](README.zh.md).
 - The other six technical documents are linked from the documentation map above and are written in Traditional Chinese.
-- Document version: v0.3 (17 November 2026). Implementation facts are current to 16 November 2026; measured results and unverified targets are reported separately in [03-testing-and-evaluation.md](docs/03-testing-and-evaluation.md).
+- Document version v0.3 (17 November 2026), with release and test status updated on 20 November 2026. Measured results and unverified targets are reported separately in [03-testing-and-evaluation.md](docs/03-testing-and-evaluation.md).
