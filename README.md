@@ -37,9 +37,9 @@ b'buyer-002'
 
 ## Image demo
 
-`image_robust` embeds an invisible watermark with `markers=False`. It recovered `ID7` from both the watermarked image and a simulated phone capture. The panels show previews of the tested images.
+`image_robust` recovered `ID7` from both images with `markers=False`. The simulated capture combines a steep perspective shift, 14° rotation, blur, glare, shadow, partial pen occlusion, and JPEG compression at quality 51. The panels show previews of the tested images.
 
-![Handwritten notes on slope and intercept on lined paper, shown as the original watermarked image and a simulated phone capture. Both tests recovered ID7.](docs/assets/tracemark-robust-demo.webp)
+![Handwritten math notes beside a simulated angled phone capture with glare, shadow, and a pen partly covering the page. Both tests recovered ID7.](docs/assets/tracemark-robust-demo.webp)
 
 ## CS1302A project details
 
