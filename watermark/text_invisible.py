@@ -55,3 +55,40 @@ def embed(text: str, payload: bytes, key: bytes | str, *, copies: int = 1, profi
         out.append(ch)
     out.extend(inserts.get(len(text), ()))
     return "".join(out)
+
+def extract(text: str, key: bytes | str, *, profile: str = "standard") -> ExtractResult:
+    stream = "".join(ch for ch in text if ch in ALPHABET or ch == SEP)
+    chunks = [c for c in stream.split(SEP) if c]
+    found = []
+    for chunk in chunks:
+        if len(chunk) % 8:
+            continue
+        data = pl.unpack(pl.from_bits(ALPHABET[c] for c in chunk), key, profile)
+        if data is not None:
+            found.append(data)
+    if not found:
+        return ExtractResult.failed(MODE, "no authenticated frame", copies_seen=len(chunks), profile=profile)
+    best = max(set(found), key=found.count)
+    return ExtractResult(MODE, True, 1.0, best, {"copies_seen": len(chunks), "copies_verified": found.count(best), "profile": profile})
+
+def _gaps(text: str) -> list[int]:
+    """Indices i where inserting before text[i] cannot split a visible character."""
+    gaps = []
+    for i in range(1, len(text) + 1):
+        prev = text[i - 1]
+        nxt = text[i] if i < len(text) else ""
+        if prev == _ZWJ or nxt == _ZWJ:
+            continue
+        if prev == "\r" and nxt == "\n":
+            continue
+        if nxt and unicodedata.category(nxt) in ("Mn", "Mc", "Me", "Cf", "Sk") and nxt not in (ZERO, ONE, SEP):
+            continue
+        if nxt and 0x1F3FB <= ord(nxt) <= 0x1F3FF:  # emoji skin-tone modifier
+            continue
+        if _regional(prev) and _regional(nxt):
+            continue
+        gaps.append(i)
+    return gaps
+
+def _regional(ch: str) -> bool:
+    return bool(ch) and 0x1F1E6 <= ord(ch) <= 0x1F1FF
