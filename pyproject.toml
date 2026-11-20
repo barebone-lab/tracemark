@@ -1,7 +1,11 @@
 [project]
 name = "tracemark"
-version = "0.1.0"
-description = "Hide bytes in images or text and read them back (CS1302A group project)"
+version = "0.1.1"
+description = "Trace a leaked copy of text or an image back to the person it was issued to"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["watermark", "leak tracing", "fingerprinting", "steganography"]
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.24",
@@ -12,6 +16,8 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/barebone-lab/tracemark"
+Documentation = "https://github.com/barebone-lab/tracemark#readme"
+Source = "https://github.com/barebone-lab/tracemark"
 
 [project.optional-dependencies]
 generative = [
@@ -19,7 +25,7 @@ generative = [
 ]
 
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
