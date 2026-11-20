@@ -12,9 +12,9 @@
 
 | 成員 | 姓名（學號） | 角色 | 主要職責 | 交付物 |
 |---|---|---|---|---|
-| Wing（Kit） | Wing Kit TSO（61204262） | Documentation Lead | 中文文件、`image_fragile` 實作與測試、英文 README 內容 | `README.zh.md`、`watermark/image_fragile.py`、`tests/test_image_fragile.py` |
-| Kay | Tung SUEN（61202650） | Documentation & English Lead | 英文翻譯與校對、`text_invisible` 實作與測試 | `README.md`、`watermark/text_invisible.py`、`tests/test_text_invisible.py` |
-| Billy | Bailin CHEN（61209510） | Lead Developer | 套件整合、其餘模式、工具、打包與發布、所有新增檔案 | `watermark/`、其餘 `tests/`、`tools/`、`pyproject.toml`、`uv.lock`、`.gitignore`、`demo.ipynb`、`docs/` |
+| Wing（Kit） | Wing Kit TSO（61204262） | Documentation Lead | 中文文件、`image_fragile` 實作與測試、英文 README 內容 | `README.zh.md`、`tracemark/image_fragile.py`、`tests/test_image_fragile.py` |
+| Kay | Tung SUEN（61202650） | Documentation & English Lead | 英文翻譯與校對、`text_invisible` 實作與測試 | `README.md`、`tracemark/text_invisible.py`、`tests/test_text_invisible.py` |
+| Billy | Bailin CHEN（61209510） | Lead Developer | 套件整合、其餘模式、工具、打包與發布、所有新增檔案 | `tracemark/`、其餘 `tests/`、`tools/`、`pyproject.toml`、`uv.lock`、`.gitignore`、`demo.ipynb`、`docs/` |
 | Amos | Tsun Hei KAE（61201585） | Video Producer | API 測試、demo 影片 | `tests/test_api.py`、1 分鐘 demo 影片 |
 
 > 課程規定每組 3–6 人；本組為 group85（4 人）。五種模式已實作；目前焦點是雙語文件、PyPI／JupyterHub 驗證、demo 與提交。文件與程式同步進行，任何 API 或數據改動都要同步更新 `README.md`、`README.zh.md` 與 `docs/`。
@@ -59,7 +59,7 @@ gantt
 | 誤判／誤指控 | 中 | 高 | 分數加人工覆核；校準閾值；保留交易紀錄；文件明示 `score` 不是機率 |
 | 法律與私隱 | 中 | 高 | 最小化資料；透明告知；PDPO 評估；`text_lexical` 外部 API 需揭露 |
 | 平台移除零寬字元 | 高 | 中 | 失敗時回報原因；以圖像或選詞模式備援 |
-| PyPI 名稱被佔用 | 中 | 高 | 先檢查 PyPI；準備備用名；`pyproject.toml` 的套件名是 `watermark` |
+| PyPI 名稱被佔用 | 中 | 高 | 先檢查 PyPI；準備備用名；`pyproject.toml` 的套件名是 `tracemark` |
 | JupyterHub 依賴衝突 | 中 | 高 | 乾淨環境 `pip install .`；鎖定版本；提交前實測 |
 | 英文版不同步 | 中 | 中 | 以 `README.zh.md` 為中文來源；Kay 校對英文；提交前逐節對照 |
 | 測試覆蓋率未量測 | 高 | 中 | 出 `pytest-cov` 報告；未量測前不宣稱 80% |
@@ -129,7 +129,7 @@ pie showData
 
 | 準則 | 官方要求 | TraceMark 的對應 | 目前狀態 |
 |---|---|---|---|
-| published | 公開 PyPI 套件頁與 public git repo；套件已上載並版本化 | `watermark` 套件、`pyproject.toml`、GitHub repo `barebone-lab/tracemark`、`0.1.0` | PyPI 待發布；repo 待確認公開 |
+| published | 公開 PyPI 套件頁與 public git repo；套件已上載並版本化 | `tracemark` 套件、`pyproject.toml`、GitHub repo `barebone-lab/tracemark`、`0.1.0` | PyPI 待發布；repo 待確認公開 |
 | documented | 公開文件：動機、創新、使用案例、安裝與使用指南 | 雙語 README 與 `docs/` | 初稿完成，英文版待校對 |
 | functional | 在 JupyterHub 以 `pip install` 安裝無衝突，並在簡報中示範 | Python API、pytest、JupyterHub 安裝測試 | 本機測試通過；JupyterHub 待驗證 |
 | innovative | 可重用、不易被現有套件取代的功能 | 五種模式共用 API、`identify` 的 match／none／ambiguous | 已實作 |

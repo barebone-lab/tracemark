@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-import watermark as wm
-from watermark import image_fragile as fr
+import tracemark as wm
+from tracemark import image_fragile as fr
 
 rng = np.random.default_rng(1)
 MODE = "image_fragile"

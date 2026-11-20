@@ -8,8 +8,8 @@ import os
 import numpy as np
 import pytest
 
-import watermark as wm
-from watermark import text_generative as tg
+import tracemark as wm
+from tracemark import text_generative as tg
 
 MODE = "text_generative"
 VOCAB = 400

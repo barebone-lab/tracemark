@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pytest
-import watermark as wm
+import tracemark as wm
 
 def test_identify_finds_recipient():
     keys = {"alice": os.urandom(32), "bob": os.urandom(32), "carol": os.urandom(32)}

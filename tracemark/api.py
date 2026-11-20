@@ -1,6 +1,6 @@
 """One entry point for every mode: embed, extract, identify.
 
-    from watermark import embed, extract, identify
+    from tracemark import embed, extract, identify
     marked = embed(image, b"Student-123", key, mode="image_fragile")
     result = extract(marked, key, mode="image_fragile")   # ExtractResult
     who = identify(leaked, {"alice": k1, "bob": k2}, mode="text_invisible")

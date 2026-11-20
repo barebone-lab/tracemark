@@ -10,11 +10,11 @@
 
 ### 6.1 分層架構
 
-實際程式以 `watermark` 套件提供三個公開函式，透過 `_MODULES` 分派到五個模式模組。使用者程式只接觸 `watermark.api` 與 `watermark.core` 的結果型別；載荷編碼、密鑰派生與載體處理都在套件內完成。
+實際程式以 `tracemark` 套件提供三個公開函式，透過 `_MODULES` 分派到五個模式模組。使用者程式只接觸 `tracemark.api` 與 `tracemark.core` 的結果型別；載荷編碼、密鑰派生與載體處理都在套件內完成。
 
 ```mermaid
 flowchart TB
-    U[使用者程式或未來的 CLI] --> API[watermark.api：embed / extract / identify]
+    U[使用者程式或未來的 CLI] --> API[tracemark.api：embed / extract / identify]
     API --> DISPATCH[_MODULES：按 mode 分派]
     DISPATCH --> F[image_fragile]
     DISPATCH --> R[image_robust]
@@ -38,7 +38,7 @@ API 只處理記憶體中的內容，不開檔、不存檔。下圖以文字為�
 sequenceDiagram
     autonumber
     participant S as 賣家
-    participant API as watermark.api
+    participant API as tracemark.api
     participant M as 模式模組
     participant P as payload
     participant B as 買家
@@ -61,12 +61,12 @@ sequenceDiagram
 
 ### 6.3 設計與模組
 
-- `watermark/api.py` 定義 `embed`、`extract`、`identify`，以 `_MODULES` 將 `mode` 字串映射到對應模組。新增模式時只需加入一個模組與一個映射，不需要修改公開簽名。
-- `watermark/core.py` 放置 `ExtractResult`、`IdentifyResult` 等 dataclass，以及 `WatermarkError`、`CapacityError`、`UnsupportedModeError` 等例外。
-- `watermark/payload.py` 負責兩種載荷格式、AES-SIV 認證加密、HMAC、scrypt／HKDF 密鑰派生與 profile 選擇。
-- `watermark/image_fragile.py`、`image_robust.py`、`text_invisible.py`、`text_lexical.py`、`text_generative.py` 各自封裝演算法；模式之間不共享可變狀態。
+- `tracemark/api.py` 定義 `embed`、`extract`、`identify`，以 `_MODULES` 將 `mode` 字串映射到對應模組。新增模式時只需加入一個模組與一個映射，不需要修改公開簽名。
+- `tracemark/core.py` 放置 `ExtractResult`、`IdentifyResult` 等 dataclass，以及 `WatermarkError`、`CapacityError`、`UnsupportedModeError` 等例外。
+- `tracemark/payload.py` 負責兩種載荷格式、AES-SIV 認證加密、HMAC、scrypt／HKDF 密鑰派生與 profile 選擇。
+- `tracemark/image_fragile.py`、`image_robust.py`、`text_invisible.py`、`text_lexical.py`、`text_generative.py` 各自封裝演算法；模式之間不共享可變狀態。
 - 這種「分派表 + 獨立模組」的結構取代了早期規劃的 `WatermarkMethod` 策略類別與 `MethodRegistry`。兩者可作為文件中的設計演進說明，但不是目前程式碼的介面。
-- 早期規劃的 `metrics.py`、正式 CLI 與 `src/` 版面尚未實作；目前套件是頂層 `watermark/` 目錄。這些差異已在第 13 節列為未來工作。
+- 早期規劃的 `metrics.py`、正式 CLI 與 `src/` 版面尚未實作；目前套件是頂層 `tracemark/` 目錄。這些差異已在第 13 節列為未來工作。
 
 ### 6.4 目錄結構
 
@@ -97,7 +97,6 @@ tracemark/
 │       └── lexicon_v1.json
 ├── tests/
 │   ├── conftest.py
-│   ├── ocr_helper.py
 │   ├── test_api.py
 │   ├── test_payload.py
 │   ├── test_image_fragile.py
@@ -112,7 +111,7 @@ tracemark/
     └── lexicon_v1_sources.json
 ```
 
-`watermark/__init__.py` 只匯出公開函式與結果型別；`api.py` 不負責檔案 I/O。`docs/` 是文件，不是套件的一部分。
+`tracemark/__init__.py` 只匯出公開函式與結果型別；`api.py` 不負責檔案 I/O。`docs/` 是文件，不是套件的一部分。
 
 ---
 
@@ -128,7 +127,7 @@ tracemark/
 ### 8.2 函式簽名與輸入型別
 
 ```python
-from watermark import embed, extract, identify
+from tracemark import embed, extract, identify
 
 marked = embed(content, payload, key, *, mode, **options)
 result = extract(content, key, *, mode, **options)
@@ -145,7 +144,7 @@ who = identify(content, keys, *, mode, **options)
 | `**options` | 依模式而定 | 見 8.3；未知選項應拋出 `TypeError` 或 `ValueError` |
 
 ```python
-from watermark import embed, extract, identify
+from tracemark import embed, extract, identify
 
 text = "This is a set of teaching notes. " * 20
 marked = embed(text, b"BUYER-001", "demo-key", mode="text_invisible")
@@ -169,7 +168,7 @@ print(who.status, who.best)
 補充：
 
 - `image_robust` 的 key-only 模式要求 `markers=False`；`markers=True` 會加入八個 ArUco 標記，承載布局與容量不同。
-- `text_lexical` 的 `candidates` 是 `Substitution(start, end, original, replacement)` 序列，從 `watermark.text_lexical` 匯入。`provider.propose(text)` 回傳候選；`DeepSeekProvider` 使用 `DEEPSEEK_API_KEY`，會將句子送到外部 API 並雙重審查。
+- `text_lexical` 的 `candidates` 是 `Substitution(start, end, original, replacement)` 序列，從 `tracemark.text_lexical` 匯入。`provider.propose(text)` 回傳候選；`DeepSeekProvider` 使用 `DEEPSEEK_API_KEY`，會將句子送到外部 API 並雙重審查。
 - `text_generative` 的 `model` 需提供 tokenizer、`decode`、`prompt_ids`、`logits`、`eos_ids`；現成 `MLXModel` 針對 Apple silicon，第一次使用會下載模型。提取與識別必須使用相同 `tokenizer=`。
 
 ### 8.4 回傳值

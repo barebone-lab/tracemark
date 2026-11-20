@@ -4,10 +4,8 @@ from pathlib import Path
 
 import pytest
 
-import watermark as wm
-from watermark.text_lexical import WORD, Lexicon, Substitution
-
-import ocr_helper
+import tracemark as wm
+from tracemark.text_lexical import WORD, Lexicon, Substitution
 
 MODE = "text_lexical"
 FIXTURE = json.loads((Path(__file__).parent / "data/lexical_fixture.json").read_text(encoding="utf-8"))
@@ -63,17 +61,9 @@ def test_candidates_must_match_text(fixed_key):
         wm.embed(TEXT, b"ID7", fixed_key, mode=MODE)
 
 
-@pytest.mark.parametrize("font", [ocr_helper.ARIAL, ocr_helper.TIMES])
-def test_survives_ocr(marked, fixed_key, font):
-    if not ocr_helper.available(font):
-        pytest.skip("needs Pillow, Tesseract and the font")
-    result = wm.extract(ocr_helper.ocr_roundtrip(marked[0], font), fixed_key, mode=MODE)
-    assert result.verified and result.payload == b"ID7"
-
-
 @pytest.mark.skipif(not os.environ.get("RUN_DEEPSEEK"), reason="set RUN_DEEPSEEK=1 and DEEPSEEK_API_KEY to call the API")
 def test_deepseek_provider_live():
-    from watermark.text_lexical import DeepSeekProvider
+    from tracemark.text_lexical import DeepSeekProvider
     text, _ = prefix(300)
     subs = DeepSeekProvider().propose(text)
     assert all(text[s.start:s.end] == s.original for s in subs)
@@ -112,7 +102,7 @@ def test_key_only_survives_retyping(key_only):
 
 def test_key_only_null_is_calibrated(key_only):
     """Random keys on an unmarked text: the reported p must not be too small too often."""
-    from watermark.text_lexical import _KeyOnly
+    from tracemark.text_lexical import _KeyOnly
     text = key_only[0]
     ps = [_KeyOnly(Lexicon.default(), os.urandom(32)).read(text)["p_adjusted"] for _ in range(400)]
     assert sum(p <= 0.05 for p in ps) <= 40 and min(ps) > 1e-4

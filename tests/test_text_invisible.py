@@ -1,5 +1,5 @@
-import watermark as wm
-from watermark import text_invisible as ti
+import tracemark as wm
+from tracemark import text_invisible as ti
 
 MODE = "text_invisible"
 TEXT = "Hello 世界! Café ñ é 👍🏽 family 👨‍👩‍👧 flag 🇭🇰 end.\r\nSecond line here."

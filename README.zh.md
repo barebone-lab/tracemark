@@ -63,13 +63,13 @@
 
 ## 快速開始：安裝、匯入與使用
 
-> **狀態**：PyPI 發布仍待完成；JupyterHub 安裝仍待驗證。以下以本機安裝為主。套件名稱是 `watermark`，Python 版本要求 `>=3.10`。
+> **狀態**：PyPI 發布仍待完成；JupyterHub 安裝仍待驗證。以下以本機安裝為主。套件名稱是 `tracemark`，Python 版本要求 `>=3.10`。
 
 ### 安裝
 
 | 方式 | 指令 | 狀態 |
 |---|---|---|
-| PyPI | `pip install watermark` | 本專案尚未發布；請待發布公告 |
+| PyPI | `pip install tracemark` | 本專案尚未發布；請待發布公告 |
 | 本地原始碼 | `git clone https://github.com/barebone-lab/tracemark.git`<br>`cd tracemark`<br>`python -m pip install .` | 可用 |
 | 開發模式 | `python -m pip install -e .` | 可用 |
 | 生成模式（可選） | `python -m pip install '.[generative]'` | 需要 Apple silicon 與 MLX；首次使用會下載模型 |
@@ -79,7 +79,7 @@
 ### 匯入
 
 ```python
-from watermark import embed, extract, identify
+from tracemark import embed, extract, identify
 ```
 
 ### 基本用法
@@ -87,7 +87,7 @@ from watermark import embed, extract, identify
 以下範例可直接運行；`content` 是記憶體中的文字，`payload` 是 `bytes`，`key` 是非空 `bytes` 或 `str`。
 
 ```python
-from watermark import embed, extract, identify
+from tracemark import embed, extract, identify
 
 keys = {"buyer-001": "demo-key-001", "buyer-002": "demo-key-002"}
 text = "這是一份教材，請妥善保存。" * 30
@@ -178,7 +178,7 @@ print(who.status, who.best)  # match, buyer-001
 
 ### 7.4 文字選詞模式（`text_lexical`）
 
-**原理**：現有 tokenizer 及詞表針對英文；中文同義詞例子列為未來擴充。嵌入需要已批准的候選替換：`candidates=` 是 `Substitution(start, end, original, replacement)` 的序列，位置是原文字串索引，類別從 `watermark.text_lexical` 匯入。另一個選項是 `provider=`，提供 `propose(text)` 回傳候選；現成 `DeepSeekProvider` 可用 `DEEPSEEK_API_KEY`，會將句子送至 DeepSeek 產生並雙重審查替換，因此涉及外部 API 與文意審閱限制。
+**原理**：現有 tokenizer 及詞表針對英文；中文同義詞例子列為未來擴充。嵌入需要已批准的候選替換：`candidates=` 是 `Substitution(start, end, original, replacement)` 的序列，位置是原文字串索引，類別從 `tracemark.text_lexical` 匯入。另一個選項是 `provider=`，提供 `propose(text)` 回傳候選；現成 `DeepSeekProvider` 可用 `DEEPSEEK_API_KEY`，會將句子送至 DeepSeek 產生並雙重審查替換，因此涉及外部 API 與文意審閱限制。
 
 **提取**：只需文字、相同公開詞表與密鑰；不依賴 AI 回覆或原文。編碼使用錨點、局部位址、Reed–Solomon 及方程求解，而不是「每個詞對獨立承載 1 bit、按匹配比例識別」的簡化描述。
 
@@ -190,7 +190,7 @@ print(who.status, who.best)  # match, buyer-001
 
 ### 7.5 文字生成模式（`text_generative`）
 
-**原理**：在模型生成文字時加入統計水印，讓輸出帶有可辨認來源的訊號。`payload=b''`，不使用載荷 frame；`model=` 必須提供 tokenizer、`decode`、`prompt_ids`、`logits` 與 `eos_ids` 介面。現成實作為 `watermark.text_generative.MLXModel`，針對 Apple silicon；首次使用會下載模型。
+**原理**：在模型生成文字時加入統計水印，讓輸出帶有可辨認來源的訊號。`payload=b''`，不使用載荷 frame；`model=` 必須提供 tokenizer、`decode`、`prompt_ids`、`logits` 與 `eos_ids` 介面。現成實作為 `tracemark.text_generative.MLXModel`，針對 Apple silicon；首次使用會下載模型。
 
 **提取與識別**：需要 `tokenizer=`，且須與生成時相同；`verified=True` 表示通過統計門檻，而不是解出一段固定載荷。
 

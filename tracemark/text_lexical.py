@@ -5,7 +5,7 @@ survives retyping and OCR as long as the words themselves are read correctly.
 
 How it works
 ------------
-* A public, versioned lexicon (watermark/data/lexicon_v1.json) groups words that
+* A public, versioned lexicon (tracemark/data/lexicon_v1.json) groups words that
   may replace each other. Every lexicon word in a text is a *carrier*.
 * Frequent stop-words chosen by the key act as *anchors*. Each carrier gets a
   byte slot from (nearest anchors, its group, its position among same-group

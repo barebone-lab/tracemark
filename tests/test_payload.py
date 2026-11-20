@@ -1,6 +1,6 @@
 import pytest
 
-from watermark import payload as pl
+from tracemark import payload as pl
 
 
 @pytest.mark.parametrize("profile", pl.PROFILES)

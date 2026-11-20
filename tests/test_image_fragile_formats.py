@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-import watermark as wm
+import tracemark as wm
 
 rng = np.random.default_rng(1)
 MODE = "image_fragile"

@@ -1,5 +1,5 @@
 [project]
-name = "watermark"
+name = "tracemark"
 version = "0.1.0"
 description = "Hide bytes in images or text and read them back (CS1302A group project)"
 requires-python = ">=3.10"
@@ -9,6 +9,9 @@ dependencies = [
     "reedsolo>=1.7,<2",
     "opencv-python-headless>=5.0.0.93",
 ]
+
+[project.urls]
+Homepage = "https://github.com/barebone-lab/tracemark"
 
 [project.optional-dependencies]
 generative = [
@@ -20,13 +23,12 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["watermark"]
+packages = ["tracemark", "tracemark.data"]
 
 [tool.setuptools.package-data]
-watermark = ["data/*.json"]
+"tracemark.data" = ["*.json"]
 
 [dependency-groups]
 dev = [
-    "pillow>=12.3.0",
     "pytest>=9.2.0",
 ]

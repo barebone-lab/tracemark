@@ -23,7 +23,7 @@ env -u RUN_DEEPSEEK -u WATERMARK_LLM uv run --locked pytest -q
 1. 需要外部 DeepSeek API 的 `text_lexical` 測試（未設定 `RUN_DEEPSEEK`）。
 2. 需要真實 MLX 模型的 `text_generative` 測試（未設定 `WATERMARK_LLM`）。
 
-生成模式的測試使用 fake model，驗證 API、載荷流程與統計判斷，不等於驗證真實模型的生成品質。`text_lexical` 另有一個測試以兩款字體的英文圖片，經 Tesseract OCR 後再提取，確認 OCR 後的選詞水印仍可讀；這是單一合成樣本，不是大規模 OCR 準確率。
+生成模式的測試使用 fake model，驗證 API、載荷流程與統計判斷。當時的 `text_lexical` 實驗曾以兩款字體渲染同一份英文樣本，經 Tesseract OCR 後成功提取水印。這項實驗已從目前的測試套件移除。
 
 測試模組與實際覆蓋範圍：
 
@@ -34,7 +34,7 @@ env -u RUN_DEEPSEEK -u WATERMARK_LLM uv run --locked pytest -q
 | `tests/test_image_fragile.py` | LSB 嵌入／提取、alpha 保留、容量邊界 |
 | `tests/test_image_robust.py` | 合成圖的 JPEG、縮放、旋轉、裁切、截圖與模擬翻拍 |
 | `tests/test_text_invisible.py` | U+200B／U+2060／U+2063 編碼、複製貼上、正規化 |
-| `tests/test_text_lexical.py` | 英文候選替換、key-only、OCR 樣本、容量樣本 |
+| `tests/test_text_lexical.py` | 英文候選替換、key-only、容量樣本 |
 | `tests/test_text_generative.py` | fake model 的生成、提取、識別與 tokenizer 不一致 |
 
 **尚未量測**：整體測試覆蓋率（`pytest-cov`）、大規模 PSNR／SSIM、BER 統計、top-1 準確率、false positive rate。這些項目列在 9.5，狀態為「待驗證」。
@@ -63,7 +63,7 @@ env -u RUN_DEEPSEEK -u WATERMARK_LLM uv run --locked pytest -q
 | 複製貼上 | `text_invisible`、`text_lexical` | 已測（單元） | 提取成功率 |
 | NFC／NFKC 正規化 | `text_invisible` | 已測；示例仍可提取 | 提取成功率 |
 | 零寬字元過濾／平台清洗 | `text_invisible` | 未做大規模平台測試 | 失敗時應回報原因 |
-| OCR（英文圖片） | `text_lexical` | 已測兩款字體樣本 | 提取成敗 |
+| OCR（英文圖片） | `text_lexical` | 早期實驗測過同一樣本的兩款字體 | 提取成敗 |
 | 人手重新輸入 | `text_lexical` | 未測 | top-1 準確率 |
 | 改寫／翻譯／統一用詞 | `text_lexical` | 未測 | top-1 準確率 |
 
@@ -107,7 +107,7 @@ env -u RUN_DEEPSEEK -u WATERMARK_LLM uv run --locked pytest -q
 |---|---|---|---|
 | 單元／整合測試 | 全部通過 | `pytest -q` | 已測：84 passed、2 skipped（2026-11-16） |
 | 本地安裝 | `python -m pip install .` 成功 | 乾淨虛擬環境 | 已測（本機） |
-| PyPI 安裝 | `pip install watermark` 成功 | 公開發布後 | 待完成（尚未發布） |
+| PyPI 安裝 | `pip install tracemark` 成功 | 公開發布後 | 待完成（尚未發布） |
 | JupyterHub 安裝 | 無依賴衝突並可 demo | 課程環境 | 待完成 |
 | `image_fragile` 無損 round-trip | 位元完全還原 | 單元測試 | 已測 |
 | `image_robust` JPEG q=30／50 | 可提取 | 合成圖測試 | 已納入；成功率未統計 |

@@ -63,13 +63,13 @@ This documentation set covers the problem background, the trade-off between two 
 
 ## Quick start: install, import, and use
 
-> **Status:** the PyPI release is still pending, and the JupyterHub install has not been verified. The instructions below focus on a local install. The package name is `watermark`, and Python `>=3.10` is required.
+> **Status:** the PyPI release is still pending, and the JupyterHub install has not been verified. The instructions below focus on a local install. The package name is `tracemark`, and Python `>=3.10` is required.
 
 ### Install
 
 | Method | Command | Status |
 |---|---|---|
-| PyPI | `pip install watermark` | Not published by this project yet; wait for the release announcement |
+| PyPI | `pip install tracemark` | Not published by this project yet; wait for the release announcement |
 | Local source | `git clone https://github.com/barebone-lab/tracemark.git`<br>`cd tracemark`<br>`python -m pip install .` | Available |
 | Development mode | `python -m pip install -e .` | Available |
 | Generative mode (optional) | `python -m pip install '.[generative]'` | Requires Apple silicon and MLX; downloads a model on first use |
@@ -79,7 +79,7 @@ Base dependencies are `numpy>=1.24`, `cryptography>=42`, `reedsolo>=1.7,<2`, and
 ### Import
 
 ```python
-from watermark import embed, extract, identify
+from tracemark import embed, extract, identify
 ```
 
 ### Basic usage
@@ -87,7 +87,7 @@ from watermark import embed, extract, identify
 The following example runs as written. `content` is text in memory, `payload` is `bytes`, and `key` is a non-empty `bytes` or `str`.
 
 ```python
-from watermark import embed, extract, identify
+from tracemark import embed, extract, identify
 
 keys = {"buyer-001": "demo-key-001", "buyer-002": "demo-key-002"}
 text = "This is a set of teaching notes. " * 20
@@ -178,7 +178,7 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### 7.4 Lexical text mode (`text_lexical`)
 
-**Principle:** The current tokenizer and lexicon are tailor-made for English; support for Chinese synonyms will soon be added. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `watermark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
+**Principle:** The current tokenizer and lexicon are tailor-made for English; support for Chinese synonyms will soon be added. Embedding requires approved substitution candidates: `candidates=` is a sequence of `Substitution(start, end, original, replacement)`, where positions are indices into the original string and the class is imported from `tracemark.text_lexical`. Alternatively, `provider=` supplies `propose(text)` to return candidates; the provided `DeepSeekProvider` uses `DEEPSEEK_API_KEY`, sends sentences to DeepSeek, and double-checks the substitutions, which involves an external API and meaning-review limits.
 
 **Extraction:** Only the text, the same public lexicon, and the key are needed; it does not depend on an AI reply or the original document. Encoding uses anchors, local addresses, Reed–Solomon coding, and equation solving, rather than the simplified description “each word pair independently carries one bit and identification uses the match ratio”.
 
@@ -190,7 +190,7 @@ For `image_robust` and `text_lexical`, `payload=b''` means key-only: only a key-
 
 ### 7.5 Generative text mode (`text_generative`)
 
-**Principle:** a statistical watermark is added while the model generates text, giving the output a traceable signal. `payload=b''`; no payload frame is used. `model=` must provide a tokenizer, `decode`, `prompt_ids`, `logits`, and `eos_ids`. The provided implementation is `watermark.text_generative.MLXModel` for Apple silicon; it downloads a model on first use.
+**Principle:** a statistical watermark is added while the model generates text, giving the output a traceable signal. `payload=b''`; no payload frame is used. `model=` must provide a tokenizer, `decode`, `prompt_ids`, `logits`, and `eos_ids`. The provided implementation is `tracemark.text_generative.MLXModel` for Apple silicon; it downloads a model on first use.
 
 **Extraction and identification:** `tokenizer=` is required and must match the one used during generation; `verified=True` means the statistical threshold was met, not that a fixed payload was decoded.
 

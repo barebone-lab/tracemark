@@ -3,9 +3,9 @@ import cv2
 import numpy as np
 import pytest
 
-import watermark as wm
-from watermark import image_robust as ir
-from watermark.core import CapacityError
+import tracemark as wm
+from tracemark import image_robust as ir
+from tracemark.core import CapacityError
 
 MODE = "image_robust"
 PAYLOAD = b"ID7"
