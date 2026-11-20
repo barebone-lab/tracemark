@@ -13,3 +13,9 @@ def test_identify_finds_recipient():
 def test_identify_none(key, other_key):
     leak = wm.embed("Some text here.", b"x", os.urandom(32), mode="text_invisible")
     assert wm.identify(leak, [key, other_key], mode="text_invisible").status == "none"
+
+def test_unknown_mode_and_payload_type(key):
+    with pytest.raises(wm.UnsupportedModeError):
+        wm.embed("text", b"x", key, mode="nope")
+    with pytest.raises(TypeError):
+        wm.embed("text", "not bytes", key, mode="text_invisible")
