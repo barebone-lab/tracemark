@@ -22,3 +22,12 @@ def test_rejections(key, other_key):
     marked = wm.embed(TEXT, b"x", key, mode=MODE)
     assert not wm.extract(marked, other_key, mode=MODE).verified
     assert not wm.extract(TEXT, key, mode=MODE).verified
+
+def test_partial_copy_with_several_copies(key):
+    text = "The quick brown fox jumps over the lazy dog. " * 60
+    marked = wm.embed(text, b"ID7", key, mode=MODE, copies=3)
+    assert wm.extract(marked[: len(marked) // 2], key, mode=MODE).payload == b"ID7"
+
+def test_reembed_replaces_old_mark(key):
+    first = wm.embed(TEXT, b"old", key, mode=MODE)
+    assert wm.extract(wm.embed(first, b"new", key, mode=MODE), key, mode=MODE).payload == b"new"
