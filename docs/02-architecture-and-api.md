@@ -229,7 +229,7 @@ class UnsupportedModeError(WatermarkError): ...
 
 ## 13. 未來工作
 
-- **v1.1**：PDF 支援（文字層 + 渲染圖）、批次嵌入、完整金鑰管理、PyPI 發布後的安裝測試、JupyterHub 驗證。
+- **v1.1**：PDF 支援（文字層 + 渲染圖）、批次嵌入、完整金鑰管理，並為新發布版本重做安裝及 JupyterHub 驗證。`0.1.0` 的驗證結果見[測試與評估](03-testing-and-evaluation.md#95-驗收標準)。
 - **v2**：以深度學習提升螢幕拍攝／翻拍穩健性（Ge et al., 2023）、影片與音訊水印、C2PA manifest 整合。
 - **評估**：建立公開攻擊測試集；量測 coverage、PSNR／SSIM、BER 與 top-1；與賣家進行使用者研究；發表可重現的評估報告。
 - **工程**：正式 CLI、`src/` 版面、CI、型別檢查、貢獻指南、倫理審查清單。

@@ -25,7 +25,7 @@
 pip install tracemark
 ```
 
-TraceMark 需要 Python 3.10 或以上。已在全新的本機 Python 3.12 環境驗證 PyPI 安裝。
+TraceMark 需要 Python 3.10 或以上。已在本機 Python 3.12 及 CS1302A JupyterHub（Ubuntu、Python 3.14.9）的乾淨環境從 PyPI 安裝 `0.1.0`。JupyterHub 上的 `pip check` 通過，零寬文字及脆弱圖像模式均成功提取測試識別碼。[測試結果](https://github.com/barebone-lab/tracemark/blob/main/docs/03-testing-and-evaluation.md#95-驗收標準)
 
 | 方式 | 指令 | 備註 |
 |---|---|---|

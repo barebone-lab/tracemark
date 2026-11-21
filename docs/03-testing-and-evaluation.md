@@ -110,7 +110,7 @@ env -u RUN_DEEPSEEK -u WATERMARK_LLM uv run --locked pytest -q tests
 | 單元／整合測試 | 全部通過 | `pytest -q` | 已測：82 passed、2 skipped（2026-11-21） |
 | 本地安裝 | `python -m pip install .` 成功 | 乾淨虛擬環境 | 已測（本機） |
 | PyPI 安裝 | `pip install tracemark` 成功 | 乾淨虛擬環境 | 已測：`0.1.0` 於全新本機 Python 3.12 環境安裝成功 |
-| JupyterHub 安裝 | 無依賴衝突並可 demo | 課程環境 | 待完成 |
+| JupyterHub 安裝 | 無依賴衝突並可 demo | CS1302A 預設 Ubuntu 伺服器內的乾淨虛擬環境 | `0.1.0` 安裝及 `pip check` 通過，文字與圖像水印流程均通過 |
 | `image_fragile` 無損 round-trip | 位元完全還原 | 單元測試 | 已測 |
 | `image_robust` JPEG q=30／50 | 可提取 | 9.7 合成圖實驗 | 已測：hidden_id／markers 10／10；key-only 8／10（文件頁失敗） |
 | `image_robust` 17 種攻擊 | 可提取 | 9.7 合成圖實驗 | 已測：hidden_id 83／85、markers 84／85、key-only 79／85；失敗全在文件頁 |
@@ -125,6 +125,8 @@ env -u RUN_DEEPSEEK -u WATERMARK_LLM uv run --locked pytest -q tests
 | FPR < 1% | null keys | 1000 次 null 試驗 | `image_robust`：120 次 null 試驗 0 次誤認；早期 600 張校準亦無誤認；1000 次待量測 |
 | Coverage ≥ 80% | 測試覆蓋率 | `pytest-cov` | 待量測 |
 | CLI | 可用指令 | 終端實測 | 尚未提供 |
+
+**JupyterHub 實測（2026-11-21）**。在課程的預設 Ubuntu 伺服器（Linux x86_64、Python 3.14.9）建立乾淨虛擬環境，從公開 PyPI 安裝 `tracemark==0.1.0`。`pip check` 回傳 `No broken requirements found.`。五個模式均成功匯入，套件內置詞庫成功載入。`text_invisible` 成功提取 `ID7` 並辨認到 `buyer-002`，`image_fragile` 成功提取 `IMG7`。這次驗證涵蓋安裝、匯入及上述兩條流程。
 
 ### 9.6 效度限制
 

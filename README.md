@@ -25,7 +25,7 @@ A visible watermark such as “For the use of XXX only” deters some buyers, bu
 pip install tracemark
 ```
 
-TraceMark requires Python 3.10 or later. Installation from PyPI has been verified in a clean local Python 3.12 environment.
+TraceMark requires Python 3.10 or later. Version `0.1.0` was installed from PyPI in clean environments on both local Python 3.12 and the CS1302A JupyterHub (Ubuntu, Python 3.14.9). On JupyterHub, `pip check` passed, and the invisible text and fragile image workflows recovered their test IDs. [Test results](https://github.com/barebone-lab/tracemark/blob/main/docs/03-testing-and-evaluation.md#95-驗收標準)
 
 | Method | Command | Notes |
 |---|---|---|
